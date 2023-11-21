@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wine">#984E4F</color>
+    <color name="darkGrey">#2A2A37</color>
+    <color name="darkBlue">#0B50A0</color>
+    <color name="transWhite">#66FEFFFF</color>
 </resources>

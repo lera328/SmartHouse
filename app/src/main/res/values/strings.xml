@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmartHouse</string>
+    <string name="addAddress">Добавьте адрес своего дома в формате\nг. Название города, ул. Название улицы, д. \nНомер дома</string>
 </resources>

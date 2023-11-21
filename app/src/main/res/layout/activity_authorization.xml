@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistrationActivity"
+    tools:context=".AuthorizationActivity"
     android:background="@drawable/background">
 
     <ImageView
@@ -16,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvText"
         android:layout_width="wrap_content"
@@ -27,6 +28,7 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="32sp"/>
+
     <Button
         android:id="@+id/button"
         android:layout_width="0dp"
@@ -58,9 +60,9 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
-        android:layout_height="208dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="64dp"
-        android:src="@drawable/rectangle_1"
+        android:src="@drawable/rectangle"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -69,9 +71,10 @@
         android:id="@+id/etPassword"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:inputType="text"
+
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
@@ -99,31 +102,10 @@
         app:layout_constraintStart_toStartOf="@+id/imageView2" />
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Электронная почта"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
-        app:layout_constraintStart_toStartOf="@+id/etEmail" />
-
-    <EditText
-        android:id="@+id/etUserName"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/imageView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Электронная почта"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/etUserName"
         app:layout_constraintStart_toStartOf="@+id/etEmail" />
 </androidx.constraintlayout.widget.ConstraintLayout>
