@@ -15,6 +15,18 @@
         android:theme="@style/Theme.SmartHouse"
         tools:targetApi="31">
         <activity
+            android:name=".ChooseDeviceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DevicesInRoomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChooseRoomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YourHouseActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity

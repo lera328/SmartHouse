@@ -30,7 +30,7 @@
         android:textSize="32sp"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btEnter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -38,22 +38,24 @@
         android:layout_marginBottom="64dp"
         android:background="@color/darkGrey"
         android:text="Регистрация"
+        android:onClick="onClickRegistration"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btRegist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="16dp"
         android:text="Войти"
+        android:onClick="onClickLogin"
         android:background="@color/wine"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btEnter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -63,7 +65,7 @@
         android:layout_height="150dp"
         android:layout_marginBottom="64dp"
         android:src="@drawable/rectangle"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btRegist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

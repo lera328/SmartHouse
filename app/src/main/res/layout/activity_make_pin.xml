@@ -65,6 +65,7 @@
             android:background="@drawable/circle_background" />
         <!-- Добавьте остальные кружочки здесь -->
     </LinearLayout>
+
     <Button
         android:id="@+id/btGet"
         android:layout_width="0dp"
@@ -72,12 +73,14 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
-        android:text="Button"
+        android:background="@color/darkGrey"
+        android:text="Выйти"
+        android:onClick="onClickExit"
+        android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        android:background="@color/darkGrey"
-        android:textColor="@color/white"/>
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
     <TableLayout
         android:id="@+id/tableLayout"
@@ -97,6 +100,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="1"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -105,6 +109,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="2"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -113,6 +118,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="3"
+                android:onClick="onClick"
                 android:textSize="24dp" />
         </TableRow>
 
@@ -124,6 +130,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="4"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -132,6 +139,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="5"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -140,6 +148,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="6"
+                android:onClick="onClick"
                 android:textSize="24dp" />
         </TableRow>
 
@@ -151,6 +160,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="7"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -159,6 +169,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="8"
+                android:onClick="onClick"
                 android:textSize="24dp" />
 
             <Button
@@ -167,6 +178,7 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/transporent_button"
                 android:text="9"
+                android:onClick="onClick"
                 android:textSize="24dp" />
         </TableRow>
 

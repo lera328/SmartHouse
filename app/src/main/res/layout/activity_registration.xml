@@ -28,40 +28,42 @@
         android:textStyle="bold"
         android:textSize="32sp"/>
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btEnter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="64dp"
         android:background="@color/darkGrey"
-        android:text="Регистрация"
+        android:text="Войти"
+        android:onClick="onClickLogin"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btRegist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="16dp"
-        android:text="Войти"
+        android:text="Регистрация"
+        android:onClick="onClickRegistration"
         android:background="@color/wine"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btEnter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
-        android:layout_height="208dp"
+        android:layout_height="215dp"
         android:layout_marginBottom="64dp"
         android:src="@drawable/rectangle_1"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btRegist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -99,7 +101,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageView2" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Электронная почта"
@@ -115,14 +117,14 @@
         android:inputType="text"
 
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/tvEmail"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="@+id/imageView2" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Электронная почта"
+        android:text="Имя пользователя"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/etUserName"
         app:layout_constraintStart_toStartOf="@+id/etEmail" />
