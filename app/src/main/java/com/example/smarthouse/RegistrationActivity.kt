@@ -3,6 +3,7 @@ package com.example.smarthouse
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.Toast
 import com.example.smarthouse.Tools.PasswordManager
@@ -22,43 +23,44 @@ class RegistrationActivity : AppCompatActivity() {
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        GlobalScope.launch {
-          //  userManager.Update()
-        }
+        binding.etPassword.inputType =
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
     }
 
     fun onClickRegistration(view: View) {
         val username = binding.etUserName.text.toString()
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
-        val passwordManager=PasswordManager()
-        if (passwordManager.isValidEmail(email)) {
-            if (passwordManager.isValidPassword(password)) {
-                if (passwordManager.isValidUsername( username)){
-                    GlobalScope.launch {
-                        userManager.addNewUser(
-                            this@RegistrationActivity,
-                            email,
-                            username,
-                            password
-                        )
-                        val sharedPreferansesManager=SharedPreferansesManager()
-                        sharedPreferansesManager.saveEmailToSharedPreferences(this@RegistrationActivity,email)
-                        sharedPreferansesManager.savePassToSharedPreferences(this@RegistrationActivity,password)
-                    }
-                    val intent = Intent(this, MakePinActivity::class.java)
-                    startActivity(intent)}
-                else Toast.makeText(this,"Неверное имя пользователя",Toast.LENGTH_SHORT).show()
-            } else Toast.makeText(this, "Неверный пароль", Toast.LENGTH_SHORT).show()
+        val passwordManager = PasswordManager()
+        val emailPattern = "[a-z0-9]+@[a-z0-9]+\\.[a-z]{2,}".toRegex()
+        if (password.isEmpty() || email.isEmpty() || !email.matches(emailPattern)) {
+            Toast.makeText(this, "Ошибка! Проверьте введенные данные", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Неверный email", Toast.LENGTH_SHORT).show()
+            GlobalScope.launch {
+                userManager.addNewUser(
+                    this@RegistrationActivity,
+                    email,
+                    username,
+                    password
+                )
+                val sharedPreferansesManager = SharedPreferansesManager()
+                sharedPreferansesManager.saveEmailToSharedPreferences(
+                    this@RegistrationActivity,
+                    email
+                )
+                sharedPreferansesManager.savePassToSharedPreferences(
+                    this@RegistrationActivity,
+                    password
+                )
+            }
+            val intent = Intent(this, MakePinActivity::class.java)
+            startActivity(intent)
         }
-
-
     }
 
     fun onClickLogin(view: View) {
         val intent: Intent = Intent(this, AuthorizationActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

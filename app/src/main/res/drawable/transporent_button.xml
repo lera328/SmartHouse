@@ -3,12 +3,14 @@
         <shape>
             <solid android:color="#330B50A0" />  <!-- здесь укажите цвет подсветки -->
             <stroke android:width="1dp" android:color="@color/black" />
+            <corners android:radius="4dp"/>
         </shape>
     </item>
     <item>
         <shape>
             <solid android:color="@android:color/transparent" />
             <stroke android:width="1dp" android:color="@color/black" />
+            <corners android:radius="4dp"/>
         </shape>
     </item>
 </selector>

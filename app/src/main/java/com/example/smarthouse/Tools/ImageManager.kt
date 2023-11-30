@@ -1,6 +1,7 @@
 package com.example.smarthouse.Tools
 
 import android.content.Context
+import android.net.Uri
 import android.util.Base64
 import java.io.File
 import java.io.FileInputStream
@@ -15,6 +16,18 @@ class ImageManager {
         inputStream.close()
         val base64String = byteArrayToBase64(byteArray)
         return base64String
+    }
+    fun imageToByteArray(context: Context, imageUri: Uri): String {
+        val inputStream = context.contentResolver.openInputStream(imageUri)
+        val byteArray = inputStream?.readBytes()
+        inputStream?.close()
+
+        if (byteArray != null) {
+            val base64String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+            return base64String
+        } else {
+            return ""
+        }
     }
 
     // Функция для перевода двоичных данных обратно в изображение

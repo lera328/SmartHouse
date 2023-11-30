@@ -16,36 +16,38 @@ import kotlinx.coroutines.launch
 
 class DevicesInRoomActivity : AppCompatActivity() {
     lateinit var binding: ActivityDevicesInRoomBinding
-    var idOfRoom:Int=0
+    var idOfRoom: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDevicesInRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val intent = getIntent()
-        val nameOfRoom = intent.getStringExtra("name")
-        //idOfRoom= intent.getIntExtra("id",0)
-        binding.tvDeviceName.setText("Устройства в " + nameOfRoom)
     }
 
     override fun onResume() {
         super.onResume()
-        idOfRoom=intent.getIntExtra("id",0)
+        idOfRoom = intent.getIntExtra("id", 0)
 
-        val dataBaseManager= DataBaseManager()
+        val dataBaseManager = DataBaseManager()
         GlobalScope.launch(Dispatchers.Main) {
-            binding.tvDeviceName.setText(dataBaseManager.getRoomName(idOfRoom))
-            val items =dataBaseManager.getDevicesInRoom(idOfRoom)
+            binding.progressBar.visibility = View.VISIBLE
+            binding.tvDeviceName.setText("Устройства в " + dataBaseManager.getRoomName(idOfRoom))
+            val items = dataBaseManager.getDevicesInRoom(idOfRoom)
             val adapter = RecyclerAdapterForMyDevices(items)
             val layoutManager = GridLayoutManager(this@DevicesInRoomActivity, 2)
             binding.recycler.layoutManager = layoutManager
-            binding.recycler.adapter = adapter}
+            binding.recycler.adapter = adapter
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     fun onClickBtPlus(view: View) {
-        val intent= Intent(this,ChooseDeviceActivity::class.java)
-        //var idOfRoom=intent.getIntExtra("id",0)
-        Toast.makeText(this@DevicesInRoomActivity, idOfRoom.toString(), Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, ChooseDeviceActivity::class.java)
         intent.putExtra("roomId", idOfRoom)
+        startActivity(intent)
+    }
+
+    fun onClickExit(view: View) {
+        val intent = Intent(this, YourHouseActivity::class.java)
         startActivity(intent)
     }
 }

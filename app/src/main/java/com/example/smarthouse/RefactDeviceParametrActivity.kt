@@ -1,5 +1,6 @@
 package com.example.smarthouse
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ class RefactDeviceParametrActivity : AppCompatActivity() {
     lateinit var binding: ActivityRefactDeviceParametrBinding
     var deviceTypeId: Int = 0
     private var deviceId = 0
+    val dataBaseManager = DataBaseManager()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRefactDeviceParametrBinding.inflate(layoutInflater)
@@ -59,16 +61,17 @@ class RefactDeviceParametrActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
         })
-        //val params:device_parametersWithId
+
         GlobalScope.launch(Dispatchers.Main) {
-            val dataBaseManager = DataBaseManager()
+            binding.progressBar.visibility = View.VISIBLE
+
             val params = dataBaseManager.getDeviceParameters(deviceId)
             val deviceType = dataBaseManager.getDeviceType(deviceTypeId)
 
             val retImageFile = File(this@RefactDeviceParametrActivity.filesDir, "image.jpg")
             val imageManager = ImageManager()
             val icons = dataBaseManager.getDevicesIcon(deviceType.iconId)
-            val image = icons.grey
+            val image = icons.blue
             imageManager.byteArrayToImage(image, retImageFile)
             val bitmap = BitmapFactory.decodeFile(retImageFile.absolutePath)
             binding.imageView5.setImageBitmap(bitmap)
@@ -102,10 +105,9 @@ class RefactDeviceParametrActivity : AppCompatActivity() {
                     binding.seekBarMaybe.max = 100
                     binding.seekBarMaybe.progress = params.power
                     binding.tvMaybe.setText("Мощность ${params.power} %")
-                    //binding.seekBarMaybe.visibility = View.VISIBLE
-                    //binding.tvMaybe.visibility = View.VISIBLE
                 }
             }
+            binding.progressBar.visibility = View.GONE
         }
 
         binding.switch1.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -156,5 +158,17 @@ class RefactDeviceParametrActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             dataBaseManager.changeDeviceParameters(deviceId, brighnes, temperature, power)
         }
+    }
+
+    fun onClickEx(view: View) {
+        val intent = Intent(this@RefactDeviceParametrActivity, DevicesInRoomActivity::class.java)
+        GlobalScope.launch(Dispatchers.Main) {
+            val id = dataBaseManager.getRoomIdFromDeviceId(deviceId)
+            intent.putExtra("id", id)
+            startActivity(intent)
+            finish()
+        }
+
+
     }
 }

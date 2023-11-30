@@ -14,6 +14,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/btBack"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:onClick="OnClickEx"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bt_back" />
 
         <TextView
             android:id="@+id/textView5"
@@ -30,8 +42,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView6"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
+            android:layout_width="140sp"
+            android:layout_height="140sp"
             android:layout_marginTop="32dp"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +52,7 @@
             app:shapeAppearanceOverlay="@style/circleImageView"
             app:strokeColor="@android:color/darker_gray"
             app:strokeWidth="1dp"
+            android:onClick="onClickToGetImage"
             tools:srcCompat="@tools:sample/avatars" />
 
 
@@ -67,14 +80,18 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:layout_margin="8sp"
+            android:layout_marginBottom="8sp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginRight="8sp"
             android:text="" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16sp"
+            android:layout_marginBottom="8sp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginRight="8sp"
             android:text="Электронная почта" />
 
         <EditText
@@ -83,14 +100,18 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:layout_margin="8sp"
+            android:layout_marginBottom="8sp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginRight="8sp"
             android:text="" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16sp"
+            android:layout_marginBottom="8sp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginRight="8sp"
             android:text="Адрес" />
 
         <EditText
@@ -106,13 +127,25 @@
             android:id="@+id/btSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Сохранить" />
+            android:text="Сохранить"
+            android:onClick="onClickSave"/>
 
         <Button
             android:id="@+id/btExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Выйти" />
+            android:text="Выйти"
+            android:onClick="onClickExit"/>
 
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

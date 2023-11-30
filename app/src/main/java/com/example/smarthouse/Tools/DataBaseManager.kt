@@ -2,20 +2,19 @@ package com.example.smarthouse.Tools
 
 import android.app.Activity
 import android.util.Log
-import android.widget.Toast
 import com.example.smarthouse.DB.DeviceIcon
 import com.example.smarthouse.DB.DeviceIconWithId
 import com.example.smarthouse.DB.Rooms
 import com.example.smarthouse.DB.RoomsWithId
 import com.example.smarthouse.DB.TypesOfRoom
 import com.example.smarthouse.DB.TypesOfRoomWithId
-import com.example.smarthouse.DB.User
 import com.example.smarthouse.DB.device_parameters
 import com.example.smarthouse.DB.device_parametersWithId
 import com.example.smarthouse.DB.devices
 import com.example.smarthouse.DB.devicesWithId
 import com.example.smarthouse.DB.devices_icons_
 import com.example.smarthouse.DB.devices_icons_withId
+import com.example.smarthouse.DB.room_iconsWithId
 import com.example.smarthouse.DB.typesOfDevices
 import com.example.smarthouse.DB.typesOfDevicesWithId
 import io.github.jan.supabase.gotrue.gotrue
@@ -24,34 +23,34 @@ import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
 
 class DataBaseManager {
-    public suspend fun addNewRoomType(
-        activity: Activity,
-        type: String,
-        image: String
-    ) {
-        try {
-            val type = TypesOfRoom(type = type, image = image)
-            SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].insert(
-                type,
-                returning = Returning.REPRESENTATION
-            )
-        } catch (e: Exception) {
-            activity.runOnUiThread {
-                Log.e("aaa", e.message.toString())
-            }
-        }
-    }
+    // public suspend fun addNewRoomType(
+    //     activity: Activity,
+    //     type: String,
+    //     image: String
+    // ) {
+    //     try {
+    //         val type = TypesOfRoom(type = type, image = image)
+    //         SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].insert(
+    //             type,
+    //             returning = Returning.REPRESENTATION
+    //         )
+    //     } catch (e: Exception) {
+    //         activity.runOnUiThread {
+    //             Log.e("aaa", e.message.toString())
+    //         }
+    //     }
+    // }
 
-    public suspend fun getRoomTypeImage(id: Int): String {
-
-        val type = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].select(
-            columns = Columns.list("type, image")
-        ) {
-            eq("id", id)
-        }.decodeSingle<TypesOfRoom>()
-        return type.image
-
-    }
+//    public suspend fun getRoomTypeImage(id: Int): String {
+//
+//        val type = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].select(
+//            columns = Columns.list("type, image")
+//        ) {
+//            eq("id", id)
+//        }.decodeSingle<TypesOfRoom>()
+//        return type.image
+//
+//    }
 
     public suspend fun getRoomTypeId(type: String): Int {
 
@@ -63,11 +62,21 @@ class DataBaseManager {
         return type.id
 
     }
+    public suspend fun getRoomIdFromDeviceId(id:Int): Int {
 
-    public suspend fun getAllRoomTypes(): List<TypesOfRoom> {
+        val device = SupabaseManager.getSupabaseClient().postgrest["devices"].select(
+            columns = Columns.list("id, name, typeId, icon, roomId")
+        ) {
+            eq("id", id)
+        }.decodeSingle<devicesWithId>()
+        return device.roomId
+
+    }
+
+    public suspend fun getAllRoomTypes(): List<TypesOfRoomWithId> {
         val typesList = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"]
-            .select(columns = Columns.list("type, image"))
-            .decodeList<TypesOfRoom>()
+            .select(columns = Columns.list("id,type, image"))
+            .decodeList<TypesOfRoomWithId>()
         return typesList
     }
 
@@ -102,6 +111,30 @@ class DataBaseManager {
             }
             .decodeList<RoomsWithId>()
         return roomList
+    }
+
+    public suspend fun getMyRoomIcons(id: Int): room_iconsWithId {
+        val roomType = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"]
+            .select(columns = Columns.list("id, type,image")) {
+                eq("id", id)
+            }
+            .decodeSingle<TypesOfRoomWithId>()
+        val roomIcons = SupabaseManager.getSupabaseClient().postgrest["room_icons"]
+            .select(columns = Columns.list("id, blue, grey, white")) {
+                eq("id", roomType.image)
+            }
+            .decodeSingle<room_iconsWithId>()
+        return roomIcons
+    }
+
+    public suspend fun getMyRoomIconFromId(id: Int): room_iconsWithId {
+
+        val roomIcons = SupabaseManager.getSupabaseClient().postgrest["room_icons"]
+            .select(columns = Columns.list("id,  blue, grey, white")) {
+                eq("id", id)
+            }
+            .decodeSingle<room_iconsWithId>()
+        return roomIcons
     }
 
     public suspend fun addNewDeviceType(
@@ -193,12 +226,12 @@ class DataBaseManager {
         return deviceList
     }
 
-    public suspend fun getDeviceType(id:Int): typesOfDevicesWithId {
+    public suspend fun getDeviceType(id: Int): typesOfDevicesWithId {
         //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
         //    updateSession = true
         //)
         val deviceType = SupabaseManager.getSupabaseClient().postgrest["typesOfDevices"]
-            .select(columns = Columns.list("id, type, iconId")){
+            .select(columns = Columns.list("id, type, iconId")) {
                 eq("id", id)
             }
             .decodeSingle<typesOfDevicesWithId>()
@@ -235,6 +268,7 @@ class DataBaseManager {
                     temperature = 0
                     power = 0
                 }
+
                 6 -> power = 0
                 27 -> power = 0
                 7 -> brightness = 0
@@ -270,17 +304,18 @@ class DataBaseManager {
             .decodeSingle<RoomsWithId>()
         return room.nameOfRoom
     }
-     public suspend fun getDeviceParameters(id:Int):device_parametersWithId{
-         val device_parameter = SupabaseManager.getSupabaseClient().postgrest["device_parameters"]
-             .select(columns = Columns.list("id, device_id, brightness, temperature, power, status")) {
-                 eq("device_id", id)
 
-             }.decodeSingle<device_parametersWithId>()
-         return  device_parameter
-     }
+    public suspend fun getDeviceParameters(id: Int): device_parametersWithId {
+        val device_parameter = SupabaseManager.getSupabaseClient().postgrest["device_parameters"]
+            .select(columns = Columns.list("id, device_id, brightness, temperature, power, status")) {
+                eq("device_id", id)
 
-    public suspend fun changeDeviceStatus(id:Int, status:Boolean): device_parameters {
-        val params=getDeviceParameters(id)
+            }.decodeSingle<device_parametersWithId>()
+        return device_parameter
+    }
+
+    public suspend fun changeDeviceStatus(id: Int, status: Boolean): device_parameters {
+        val params = getDeviceParameters(id)
 
         val devicePar = device_parameters(
             device_id = id,
@@ -300,8 +335,13 @@ class DataBaseManager {
         return devicePar
     }
 
-    public suspend fun changeDeviceParameters(id:Int, brightness:Int, temperature:Int, power:Int){
-        val params=getDeviceParameters(id)
+    public suspend fun changeDeviceParameters(
+        id: Int,
+        brightness: Int,
+        temperature: Int,
+        power: Int
+    ) {
+        val params = getDeviceParameters(id)
 
         val devicePar = device_parameters(
             device_id = id,
@@ -320,83 +360,5 @@ class DataBaseManager {
         }
     }
 
-    public suspend fun changeDeviceParametersBrigh(id:Int, brightness:Int){
-        val params=getDeviceParameters(id)
 
-        val devicePar = device_parameters(
-            device_id = id,
-            brightness = brightness,
-            temperature = params.temperature,
-            power = params.power,
-            status = params.status
-        )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
-            eq("id", params.id)
-        }
-    }
-
-    public suspend fun changeDeviceParametersTemp(id:Int, temperature:Int){
-        val params=getDeviceParameters(id)
-
-        val devicePar = device_parameters(
-            device_id = id,
-            brightness = params.brightness,
-            temperature = temperature,
-            power = params.power,
-            status = params.status
-        )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
-            eq("id", params.id)
-        }
-    }
-
-    public suspend fun changeDeviceParametersPow(id:Int, power:Int){
-        val params=getDeviceParameters(id)
-
-        val devicePar = device_parameters(
-            device_id = id,
-            brightness = params.brightness,
-            temperature = params.temperature,
-            power = power,
-            status = params.status
-        )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
-            eq("id", params.id)
-        }
-    }
-
-    public suspend fun changeDeviceParametersTemPower(id:Int, temperature:Int, power:Int){
-        val params=getDeviceParameters(id)
-
-        val devicePar = device_parameters(
-            device_id = id,
-            brightness = params.brightness,
-            temperature = temperature,
-            power = power,
-            status = params.status
-        )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
-            eq("id", params.id)
-        }
-    }
 }

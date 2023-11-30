@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smarthouse.DB.Rooms
 import com.example.smarthouse.DB.RoomsWithId
 import com.example.smarthouse.DevicesInRoomActivity
 import com.example.smarthouse.R
@@ -28,22 +27,16 @@ class ResyslerAdapterForMyRooms(private val itemList: List<RoomsWithId>) :
                 val imageManager = ImageManager()
 
                 val dataBaseManager = DataBaseManager()
-                val image=dataBaseManager.getRoomTypeImage(item.idOfType)
+                val image=dataBaseManager.getMyRoomIcons(item.idOfType).blue
                 imageManager.byteArrayToImage(image, retrievedImageFile)
                 val bitmap = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
                 binding.imageViewMyRoom.setImageBitmap(bitmap)
                 binding.textViewMyRoom.setText(item.nameOfRoom)
                 view.setOnClickListener {
                     val intent=Intent(view.context,DevicesInRoomActivity::class.java)
-                    intent.putExtra("name", item.nameOfRoom)
                     intent.putExtra("id", item.id)
                     view.context.startActivity(intent)
                 }
-               // view.setOnClickListener {
-               //     val intent=Intent(view.context, DevicesInRoomActivity::class.java)
-               //     intent.putExtra("id",item.)
-               //     view.context.startActivity(intent)
-               // }
             }
         }
     }

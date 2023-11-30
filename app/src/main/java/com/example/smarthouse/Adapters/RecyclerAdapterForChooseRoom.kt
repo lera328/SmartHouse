@@ -6,8 +6,11 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthouse.DB.TypesOfRoom
+import com.example.smarthouse.DB.TypesOfRoomWithId
+import com.example.smarthouse.DB.typesOfDevicesWithId
 import com.example.smarthouse.R
 import com.example.smarthouse.Tools.DataBaseManager
 import com.example.smarthouse.Tools.ImageManager
@@ -18,30 +21,45 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RecyclerAdapterForChooseRoom(private val itemList: List<TypesOfRoom>) :
+class RecyclerAdapterForChooseRoom(private val itemList: List<TypesOfRoomWithId>) :
     RecyclerView.Adapter<RecyclerAdapterForChooseRoom.ViewHolder>() {
-    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val binding=CardviewItemForChooseBinding.bind(view)
-        fun bind(item:TypesOfRoom){
-            val retrievedImageFile = File(view.context.filesDir, "image.jpg")
-            val imageManager = ImageManager()
-            imageManager.byteArrayToImage(item.image, retrievedImageFile)
-            val bitmap = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
-            binding.imageView.setImageBitmap(bitmap)
-            binding.text.setText(item.type)
-            binding.imageView.setOnClickListener {
-                val dataBaseManager= DataBaseManager()
-                GlobalScope.launch(Dispatchers.Main) {
-                    dataBaseManager.addNewRoom(
-                        view.context as Activity,
-                        item.type,
-                        dataBaseManager.getRoomTypeId(item.type)
-                    )
-                    val intent=Intent(view.context, YourHouseActivity::class.java)
-                    intent.putExtra("Selected", item.type)
-                    view.context.startActivity(intent)
-                }
+    var selectedPosition = RecyclerView.NO_POSITION
 
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val binding = CardviewItemForChooseBinding.bind(view)
+        val imageManager = ImageManager()
+        val dataBaseManager = DataBaseManager()
+
+        fun bind(item: TypesOfRoomWithId, position: Int) {
+            val retrievedImageFile = File(view.context.filesDir, "image.jpg")
+
+            GlobalScope.launch(Dispatchers.Main) {
+                binding.textV.setText(item.type)
+                val images = dataBaseManager.getMyRoomIconFromId(item.image)
+                if (selectedPosition == position) {
+                    imageManager.byteArrayToImage(
+                        images.blue,
+                        retrievedImageFile
+                    ) // Установка цвета фона для выбранного элемента
+                } else {
+                    imageManager.byteArrayToImage(
+                        images.white,
+                        retrievedImageFile
+                    ) // Сброс цвета фона для остальных элементов
+                }
+                //imageManager.byteArrayToImage(images.white, retrievedImageFile)
+                val bitmap = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
+                binding.imageView.setImageBitmap(bitmap)
+                binding.textV.setText(item.type)
+            }
+            binding.imageView.setOnClickListener {
+                if (selectedPosition != adapterPosition) {
+                    val previouslySelectedItemPosition = selectedPosition
+                    selectedPosition = adapterPosition
+                    notifyItemChanged(previouslySelectedItemPosition)
+                    notifyItemChanged(selectedPosition)
+                    Toast.makeText(view.context, getSelectedIem()?.type, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -58,6 +76,14 @@ class RecyclerAdapterForChooseRoom(private val itemList: List<TypesOfRoom>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemList[position]
-        holder.bind(item)
+        holder.bind(item, position)
+    }
+
+    fun getSelectedIem(): TypesOfRoomWithId? {
+        return if (selectedPosition != RecyclerView.NO_POSITION) {
+            itemList[selectedPosition]
+        } else {
+            null
+        }
     }
 }

@@ -21,29 +21,6 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        val imageManager = ImageManager()
-
-        val dataBaseManager = DataBaseManager()
-
-//         GlobalScope.launch(Dispatchers.Main) { // Используем Dispatcher.Main для выполнения в основном потоке
-//             val imageByteArray1 = withContext(Dispatchers.IO) {
-//
-//                 imageManager.imageToByteArray(this@SplashScreen, R.drawable.thermo_blue1)
-//             }
-//             val imageByteArray2 = withContext(Dispatchers.IO) {
-//                 imageManager.imageToByteArray(this@SplashScreen, R.drawable.thermo_gray1)
-//             }
-//             val imageByteArray3 = withContext(Dispatchers.IO) {
-//                 imageManager.imageToByteArray(this@SplashScreen, R.drawable.thermo_white1)
-//             }
-//
-//             dataBaseManager.addNewIcon(
-//                 this@SplashScreen,
-//                 imageByteArray3,
-//                 imageByteArray1,
-//                 imageByteArray2
-//             )
-//         }
 
         val sharedPreferansesManager = SharedPreferansesManager()
         val email_ = sharedPreferansesManager.getFromSharedPreferences(this, "email")
@@ -64,13 +41,6 @@ class SplashScreen : AppCompatActivity() {
                 finish()
             }, SPLASH_TIME_OUT)
         }
-
-        //  GlobalScope.launch (Dispatchers.Main){ try{ val dataBaseManager=DataBaseManager()
-        //      Log.println(Log.ERROR,"aaa",dataBaseManager.getRoomTypeId("Кухня").toString())}
-        //  catch (e:Exception){
-        //      Log.println(Log.ERROR,"aaa",e.message.toString())
-        //  }
-        //  }
 
 
     }

@@ -1,5 +1,6 @@
 package com.example.smarthouse
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,8 +28,9 @@ class ChooseDeviceActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         idOfRoom = intent.getIntExtra("roomId", 0)
-        Toast.makeText(this@ChooseDeviceActivity, idOfRoom.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this@ChooseDeviceActivity, idOfRoom.toString(), Toast.LENGTH_SHORT).show()
         val dataBaseManager = DataBaseManager()
         GlobalScope.launch(Dispatchers.Main) {
             val items = dataBaseManager.getDevicesTypes()
@@ -40,6 +42,7 @@ class ChooseDeviceActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun onClick(view: View) {
         Toast.makeText(this@ChooseDeviceActivity, idOfRoom.toString(), Toast.LENGTH_SHORT).show()
         if (binding.editTextText2.text.length > 1 && adapter.getSelectedIem() != null) {
@@ -48,12 +51,20 @@ class ChooseDeviceActivity : AppCompatActivity() {
             val dataBaseManager = DataBaseManager()
 
             GlobalScope.launch(Dispatchers.Main) {
-                 dataBaseManager.addNewDeviceToRoom(this@ChooseDeviceActivity,binding.editTextText2.text.toString(),
-                     adapter.getSelectedIem()!!.iconId,idOfRoom, adapter.getSelectedIem()!!.id )
+                dataBaseManager.addNewDeviceToRoom(
+                    this@ChooseDeviceActivity, binding.editTextText2.text.toString(),
+                    adapter.getSelectedIem()!!.iconId, idOfRoom, adapter.getSelectedIem()!!.id
+                )
                 val intent = Intent(this@ChooseDeviceActivity, DevicesInRoomActivity::class.java)
-                  intent.putExtra("id",idOfRoom)
+                intent.putExtra("id", idOfRoom)
                 startActivity(intent)
             }
         } else Toast.makeText(this, "Введите имя и выберите тип комнаты", Toast.LENGTH_SHORT).show()
+    }
+
+    fun onClickEx(view: View) {
+        val intent=Intent(this, DevicesInRoomActivity::class.java)
+        intent.putExtra("id", idOfRoom)
+        startActivity(intent)
     }
 }

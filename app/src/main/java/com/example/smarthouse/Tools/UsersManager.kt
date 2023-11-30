@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.example.smarthouse.DB.TypesOfRoom
 import com.example.smarthouse.DB.User
+import com.example.smarthouse.DB.device_parameters
+import com.example.smarthouse.DB.userInformation
+import com.example.smarthouse.DB.userInformationWithId
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
@@ -37,6 +39,14 @@ class UsersManager() {
 
             SupabaseManager.getSupabaseClient().postgrest["user"].insert(
                 user,
+                returning = Returning.REPRESENTATION
+            )
+
+            val user_information =
+                userInformation("", user.id, " ")
+
+            SupabaseManager.getSupabaseClient().postgrest["userInformation"].insert(
+                user_information,
                 returning = Returning.REPRESENTATION
             )
         } catch (e: Exception) {
@@ -96,4 +106,107 @@ class UsersManager() {
         }
         return false
     }
+
+    public suspend fun changeUserAdress(address: String) {
+        val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
+            updateSession = true
+        )
+
+        val getInf = SupabaseManager.getSupabaseClient().postgrest["usersInformation"].select(
+            columns = Columns.list("id,home_address, userId, image")
+        ) {
+            eq("userId", get_user.id)
+
+        }.decodeSingle<userInformationWithId>()
+        val userInformation = userInformation(address, get_user.id, getInf.image)
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].insert(
+            userInformation,
+            returning = Returning.REPRESENTATION
+        )
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].delete {
+            eq("id", getInf.id)
+        }
+    }
+
+    public suspend fun changeUserImage(image: String) {
+        val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
+            updateSession = true
+        )
+
+        val getInf = SupabaseManager.getSupabaseClient().postgrest["usersInformation"].select(
+            columns = Columns.list("id,home_address, userId, image")
+        ) {
+            eq("userId", get_user.id)
+
+        }.decodeSingle<userInformationWithId>()
+        val userInformation = userInformation(getInf.home_address, get_user.id, image)
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].insert(
+            userInformation,
+            returning = Returning.REPRESENTATION
+        )
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].delete {
+            eq("id", getInf.id)
+        }
+    }
+
+    public suspend fun changeUserInformation(
+        home_address: String,
+        username: String,
+        email: String
+    ) {
+        val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
+            updateSession = true
+        )
+
+        val getInf = SupabaseManager.getSupabaseClient().postgrest["usersInformation"].select(
+            columns = Columns.list("id,home_address, userId, image")
+        ) {
+            eq("userId", get_user.id)
+
+        }.decodeSingle<userInformationWithId>()
+        val userInformation = userInformation(home_address, get_user.id, getInf.image)
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].insert(
+            userInformation,
+            returning = Returning.REPRESENTATION
+        )
+        SupabaseManager.getSupabaseClient().postgrest["usersInformation"].delete {
+            eq("id", getInf.id)
+        }
+        SupabaseManager.getSupabaseClient().postgrest["user"].update(
+            {
+                set("email", email)
+                set("username", username)
+            }
+        ) {
+            eq("id", get_user.id)
+        }
+    }
+
+    public suspend fun getUserInformation(): userInformationWithId {
+        val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
+            updateSession = true
+        )
+
+        val getInf = SupabaseManager.getSupabaseClient().postgrest["usersInformation"].select(
+            columns = Columns.list("id,home_address, userId, image")
+        ) {
+            eq("userId", get_user.id)
+
+        }.decodeSingle<userInformationWithId>()
+        return getInf
+    }
+
+    public suspend fun getUser(): User {
+        val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
+            updateSession = true
+        )
+        val user = SupabaseManager.getSupabaseClient().postgrest["user"].select(
+            columns = Columns.list("id,email,username, password")
+        ) {
+            eq("id", get_user.id)
+        }.decodeSingle<User>()
+        return user
+    }
+
+
 }

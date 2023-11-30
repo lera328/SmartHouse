@@ -32,8 +32,8 @@ class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWith
 
         fun bind(item: typesOfDevicesWithId, position: Int) {
 
-            binding.imageView.setBackgroundColor(Color.LTGRAY)
-            //view.isSelected=(selectedPosition==position)
+
+
             GlobalScope.launch(Dispatchers.Main) {
                 val icons = dataBaseManager.getDevicesIcon(item.iconId)
                 val retrievedImageFile = File(view.context.filesDir, "image.jpg")
@@ -45,6 +45,7 @@ class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWith
 
                 val bitmap_white = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
                 binding.imageView.setImageBitmap(bitmap_white)
+                binding.textV.setText(item.type)
             }
 
 
@@ -58,9 +59,6 @@ class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWith
                     Toast.makeText(view.context,getSelectedIem()?.type,Toast.LENGTH_SHORT).show()
                 }
             }
-
-
-
         }
 
     }

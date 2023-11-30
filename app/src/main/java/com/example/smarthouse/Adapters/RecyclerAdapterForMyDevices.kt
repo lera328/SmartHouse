@@ -33,7 +33,7 @@ class RecyclerAdapterForMyDevices(private val items: List<devicesWithId>) :
                 val imageManager = ImageManager()
 
                 val icons = dataBaseManager.getDevicesIcon(item.icon)
-                val image = icons.grey
+                val image = icons.blue
                 imageManager.byteArrayToImage(image, retImageFile)
                 val bitmap = BitmapFactory.decodeFile(retImageFile.absolutePath)
                 binding.imageView5.setImageBitmap(bitmap)
