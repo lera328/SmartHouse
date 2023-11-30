@@ -7,7 +7,6 @@ import io.github.jan.supabase.postgrest.Postgrest
 
 object SupabaseManager {
     private var supabaseClient: SupabaseClient? = null
-
     fun getSupabaseClient(): SupabaseClient {
         if (supabaseClient == null) {
             val supabaseUrl = "https://dqjyaffhgdrfsiabzmyi.supabase.co"

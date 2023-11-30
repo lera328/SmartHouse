@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.example.smarthouse.DB.TypesOfRoom
 import com.example.smarthouse.DB.User
 import io.github.jan.supabase.gotrue.gotrue
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
 
 class UsersManager() {
@@ -71,5 +73,27 @@ class UsersManager() {
         ) {
             eq("username", "боря")
         }.decodeSingle<User>()
+    }
+
+    public suspend fun getUser(email_: String, password_: String): Boolean {
+        try {
+            val user = SupabaseManager.getSupabaseClient().postgrest["user"].select(
+                columns = Columns.list("id,email,username, password")
+            ) {
+                eq("email", email_)
+                eq("password", password_)
+            }.decodeSingle<User>()
+
+            if (user != null) {
+                return true
+            }
+        } catch (e: NoSuchElementException) {
+            return false
+            //println("Ошибка: список пустой")
+        } catch (e: Exception) {
+            return false
+            //println("Произошла ошибка: ${e.message}")
+        }
+        return false
     }
 }

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.SmartHouse"
         tools:targetApi="31">
         <activity
+            android:name=".RefactDeviceParametrActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChooseDeviceActivity"
             android:exported="false" />
         <activity

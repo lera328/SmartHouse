@@ -1,5 +1,6 @@
 package com.example.smarthouse
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -8,8 +9,12 @@ import android.view.View
 import android.widget.Button
 import com.example.smarthouse.Tools.PasswordManager
 import com.example.smarthouse.Tools.SharedPreferansesManager
+import com.example.smarthouse.Tools.SupabaseManager
 import com.example.smarthouse.databinding.ActivityAuthorizationBinding
 import com.example.smarthouse.databinding.ActivityMakePinBinding
+import io.github.jan.supabase.gotrue.gotrue
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MakePinActivity : AppCompatActivity() {
     var pin_kod: String = ""
@@ -41,6 +46,14 @@ class MakePinActivity : AppCompatActivity() {
                 if (pin != null) {
                     if (pin == pin_kod)
                         startActivity(intent)
+                    else {
+                        pin_kod = ""
+                        binding.circle1.setBackgroundColor(Color.TRANSPARENT)
+                        binding.circle2.setBackgroundColor(Color.TRANSPARENT)
+                        binding.circle3.setBackgroundColor(Color.TRANSPARENT)
+                        binding.circle4.setBackgroundColor(Color.TRANSPARENT)
+                    }
+
                 } else {
                     manager.saveToSharedPreferences(this, pin_kod)
                     startActivity(intent)
@@ -49,12 +62,17 @@ class MakePinActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun onClickExit(view: View) {
         val manager: PasswordManager = PasswordManager()
-        manager.saveToSharedPreferences(this,null)
-        val sharedPreferansesManager=SharedPreferansesManager()
+        manager.saveToSharedPreferences(this, null)
+        val sharedPreferansesManager = SharedPreferansesManager()
         sharedPreferansesManager.saveEmailToSharedPreferences(this, null)
         sharedPreferansesManager.savePassToSharedPreferences(this, null)
-        val intent=Intent(this, ActivityAuthorizationBinding::class.java)
+        GlobalScope.launch {
+            SupabaseManager.getSupabaseClient().gotrue.logout()
+            val intent = Intent(this@MakePinActivity, ActivityAuthorizationBinding::class.java)
+            startActivity(intent)
+        }
     }
 }

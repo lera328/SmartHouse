@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthouse.DB.Rooms
+import com.example.smarthouse.DB.RoomsWithId
 import com.example.smarthouse.DevicesInRoomActivity
 import com.example.smarthouse.R
 import com.example.smarthouse.Tools.DataBaseManager
@@ -17,11 +18,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class ResyslerAdapterForMyRooms(private val itemList: List<Rooms>) :
+class ResyslerAdapterForMyRooms(private val itemList: List<RoomsWithId>) :
     RecyclerView.Adapter<ResyslerAdapterForMyRooms.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val binding = CardviewItemForMyRoomsBinding.bind(view)
-        fun bind(item: Rooms) {
+        fun bind(item: RoomsWithId) {
             GlobalScope.launch(Dispatchers.Main) {
                 val retrievedImageFile = File(view.context.filesDir, "image.jpg")
                 val imageManager = ImageManager()
@@ -32,11 +33,17 @@ class ResyslerAdapterForMyRooms(private val itemList: List<Rooms>) :
                 val bitmap = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
                 binding.imageViewMyRoom.setImageBitmap(bitmap)
                 binding.textViewMyRoom.setText(item.nameOfRoom)
-                binding.imageViewMyRoom.setOnClickListener {
+                view.setOnClickListener {
                     val intent=Intent(view.context,DevicesInRoomActivity::class.java)
                     intent.putExtra("name", item.nameOfRoom)
+                    intent.putExtra("id", item.id)
                     view.context.startActivity(intent)
                 }
+               // view.setOnClickListener {
+               //     val intent=Intent(view.context, DevicesInRoomActivity::class.java)
+               //     intent.putExtra("id",item.)
+               //     view.context.startActivity(intent)
+               // }
             }
         }
     }

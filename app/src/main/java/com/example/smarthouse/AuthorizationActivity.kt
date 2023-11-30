@@ -13,6 +13,7 @@ import com.example.smarthouse.Tools.DataBaseManager
 import com.example.smarthouse.Tools.ImageManager
 import com.example.smarthouse.Tools.SharedPreferansesManager
 import com.example.smarthouse.Tools.SupabaseManager
+import com.example.smarthouse.Tools.UsersManager
 import com.example.smarthouse.databinding.ActivityAddAddressBinding
 import com.example.smarthouse.databinding.ActivityAuthorizationBinding
 import io.github.jan.supabase.SupabaseClient
@@ -37,19 +38,7 @@ class AuthorizationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthorizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val sharedPreferansesManager = SharedPreferansesManager()
-        val email_=sharedPreferansesManager.getFromSharedPreferences(this,"email")
-        val pass=sharedPreferansesManager.getFromSharedPreferences(this, "pass")
-        if (email_ != null && pass!=null) {
-            GlobalScope.launch(Dispatchers.Main) {
-                SupabaseManager.getSupabaseClient().gotrue.loginWith(Email) {
-                    email = email_
-                    password = pass
-                }
-                val intent=Intent(this@AuthorizationActivity, MakePinActivity::class.java)
-                startActivity(intent)
-            }
-        }
+
 
 //картинки так будем брать
         //GlobalScope.launch(Dispatchers.Main) {
@@ -66,8 +55,45 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     fun onClickLogin(view: View) {
-        val intent: Intent = Intent(this, MakePinActivity::class.java)
-        startActivity(intent)
+        val email_ = binding.etEmail.text.toString()
+        val password_ = binding.etPassword.text.toString()
+        val usersManager = UsersManager()
+
+        GlobalScope.launch {
+
+            if (usersManager.getUser(email_, password_)) {
+                SupabaseManager.getSupabaseClient().gotrue.loginWith(Email) {
+                    email = email_
+                    password = password_
+                }
+                val sharedPreferansesManager=SharedPreferansesManager()
+                sharedPreferansesManager.saveEmailToSharedPreferences(this@AuthorizationActivity, email_)
+                sharedPreferansesManager.savePassToSharedPreferences(this@AuthorizationActivity, password_)
+                val intent: Intent = Intent(this@AuthorizationActivity, MakePinActivity::class.java)
+                startActivity(intent)
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@AuthorizationActivity,
+                        "Неправильный логин или пароль",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+        }
+
+        // GlobalScope.launch {
+        //     val email_=binding.etEmail.text.toString()
+        //     val password_=binding.etPassword.text.toString()
+        //     SupabaseManager.getSupabaseClient().gotrue.loginWith(Email) {
+        //         email = email_
+        //         password = password_
+        //     }
+        //     //val intent: Intent = Intent(this@AuthorizationActivity, MakePinActivity::class.java)
+        //     //startActivity(intent)
+        // }
+
     }
 
     fun onClickRegistration(view: View) {

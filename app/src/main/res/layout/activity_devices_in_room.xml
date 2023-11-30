@@ -7,12 +7,14 @@
     tools:context=".DevicesInRoomActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="150sp"
+        android:background="@color/futer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/futer">
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageButton
             android:id="@+id/btBack"
             android:layout_width="50sp"
@@ -26,7 +28,7 @@
             app:srcCompat="@drawable/bt_back" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tvDeviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -50,4 +52,15 @@
         android:scaleType="fitCenter"
         android:background="@android:color/transparent"
         android:onClick="onClickBtPlus"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 </androidx.constraintlayout.widget.ConstraintLayout>

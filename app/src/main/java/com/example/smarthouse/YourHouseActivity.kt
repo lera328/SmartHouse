@@ -22,6 +22,7 @@ class YourHouseActivity : AppCompatActivity() {
 
     fun onClickBtPlus(view: View) {
         val intent= Intent(this,ChooseRoomActivity::class.java)
+        //intent.putExtra("roomId", )
         startActivity(intent)
     }
 
@@ -35,4 +36,5 @@ class YourHouseActivity : AppCompatActivity() {
             binding.recyclerViewRooms.layoutManager = layoutManager
             binding.recyclerViewRooms.adapter = adapter}
     }
+
 }
