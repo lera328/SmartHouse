@@ -27,13 +27,13 @@ class ResyslerAdapterForMyRooms(private val itemList: List<RoomsWithId>) :
                 val imageManager = ImageManager()
 
                 val dataBaseManager = DataBaseManager()
-                val image=dataBaseManager.getMyRoomIcons(item.idOfType).blue
+                val image = dataBaseManager.getMyRoomIcons(item.idOfType).blue
                 imageManager.byteArrayToImage(image, retrievedImageFile)
                 val bitmap = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
                 binding.imageViewMyRoom.setImageBitmap(bitmap)
                 binding.textViewMyRoom.setText(item.nameOfRoom)
                 view.setOnClickListener {
-                    val intent=Intent(view.context,DevicesInRoomActivity::class.java)
+                    val intent = Intent(view.context, DevicesInRoomActivity::class.java)
                     intent.putExtra("id", item.id)
                     view.context.startActivity(intent)
                 }
@@ -42,19 +42,18 @@ class ResyslerAdapterForMyRooms(private val itemList: List<RoomsWithId>) :
     }
 
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.cardview_item_for_my_rooms, parent, false)
+        return ViewHolder(view)
+    }
 
-override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    val view = LayoutInflater.from(parent.context)
-        .inflate(R.layout.cardview_item_for_my_rooms, parent, false)
-    return ViewHolder(view)
-}
+    override fun getItemCount(): Int {
+        return itemList.size
+    }
 
-override fun getItemCount(): Int {
-    return itemList.size
-}
-
-override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = itemList[position]
-    holder.bind(item)
-}
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = itemList[position]
+        holder.bind(item)
+    }
 }

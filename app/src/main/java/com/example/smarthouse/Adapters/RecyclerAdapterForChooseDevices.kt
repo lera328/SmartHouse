@@ -22,25 +22,28 @@ import java.io.File
 
 class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWithId>) :
     RecyclerView.Adapter<RecyclerAdapterForChooseDevices.ViewHolder>() {
-    private var selectedPosition=RecyclerView.NO_POSITION
+    private var selectedPosition = RecyclerView.NO_POSITION
 
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val binding = CardviewItemForChooseBinding.bind(view)
         val dataBaseManager = DataBaseManager()
         val imageManager = ImageManager()
-
         fun bind(item: typesOfDevicesWithId, position: Int) {
-
-
 
             GlobalScope.launch(Dispatchers.Main) {
                 val icons = dataBaseManager.getDevicesIcon(item.iconId)
                 val retrievedImageFile = File(view.context.filesDir, "image.jpg")
                 if (selectedPosition == position) {
-                    imageManager.byteArrayToImage(icons.blue, retrievedImageFile) // Установка цвета фона для выбранного элемента
+                    imageManager.byteArrayToImage(
+                        icons.blue,
+                        retrievedImageFile
+                    ) // Установка цвета фона для выбранного элемента
                 } else {
-                    imageManager.byteArrayToImage(icons.white, retrievedImageFile) // Сброс цвета фона для остальных элементов
+                    imageManager.byteArrayToImage(
+                        icons.white,
+                        retrievedImageFile
+                    ) // Сброс цвета фона для остальных элементов
                 }
 
                 val bitmap_white = BitmapFactory.decodeFile(retrievedImageFile.absolutePath)
@@ -48,15 +51,13 @@ class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWith
                 binding.textV.setText(item.type)
             }
 
-
-
             view.setOnClickListener {
                 if (selectedPosition != adapterPosition) {
                     val previouslySelectedItemPosition = selectedPosition
                     selectedPosition = adapterPosition
                     notifyItemChanged(previouslySelectedItemPosition)
                     notifyItemChanged(selectedPosition)
-                    Toast.makeText(view.context,getSelectedIem()?.type,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(view.context, getSelectedIem()?.type, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -77,6 +78,7 @@ class RecyclerAdapterForChooseDevices(private val items: List<typesOfDevicesWith
         val item = items[position]
         holder.bind(item, position)
     }
+
     fun getSelectedIem(): typesOfDevicesWithId? {
         return if (selectedPosition != RecyclerView.NO_POSITION) {
             items[selectedPosition]

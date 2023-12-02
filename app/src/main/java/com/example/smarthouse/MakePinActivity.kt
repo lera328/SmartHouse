@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import com.example.smarthouse.Tools.PasswordManager
 import com.example.smarthouse.Tools.SharedPreferansesManager
 import com.example.smarthouse.Tools.SupabaseManager
@@ -17,6 +18,7 @@ import io.github.jan.supabase.gotrue.gotrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeoutException
 
 class MakePinActivity : AppCompatActivity() {
     var pin_kod: String = ""
@@ -58,6 +60,7 @@ class MakePinActivity : AppCompatActivity() {
                                 Intent(this@MakePinActivity, AddAddressActivity::class.java)
                             binding.progressBar.visibility = View.GONE
                             startActivity(intent)
+                            finish()
                         }
                     } else {
                         pin_kod = ""
@@ -68,9 +71,20 @@ class MakePinActivity : AppCompatActivity() {
                     }
 
                 } else {
-
                     manager.saveToSharedPreferences(this, pin_kod)
-                    startActivity(intent)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        binding.progressBar.visibility = View.VISIBLE
+                        var intent = Intent()
+                        if (userManager.getUserInformation().home_address.length > 1) {
+                            intent = Intent(this@MakePinActivity, YourHouseActivity::class.java)
+                        } else intent =
+                            Intent(this@MakePinActivity, AddAddressActivity::class.java)
+                        binding.progressBar.visibility = View.GONE
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    // startActivity(intent)
                 }
             }
         }
@@ -83,11 +97,17 @@ class MakePinActivity : AppCompatActivity() {
         val sharedPreferansesManager = SharedPreferansesManager()
         sharedPreferansesManager.saveEmailToSharedPreferences(this, null)
         sharedPreferansesManager.savePassToSharedPreferences(this, null)
-        GlobalScope.launch {
-            val intent = Intent(this@MakePinActivity, AuthorizationActivity::class.java)
-            startActivity(intent)
-            SupabaseManager.getSupabaseClient().gotrue.logout()
-            finish()
+        try {
+
+
+            GlobalScope.launch {
+                val intent = Intent(this@MakePinActivity, AuthorizationActivity::class.java)
+                startActivity(intent)
+                SupabaseManager.getSupabaseClient().gotrue.logout()
+                finish()
+            }
+        } catch (e: TimeoutException) {
+            Toast.makeText(this,"Произошло исключение: ${e.message}",Toast.LENGTH_SHORT).show()
         }
     }
 }

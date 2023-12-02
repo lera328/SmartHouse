@@ -13,6 +13,7 @@ import com.example.smarthouse.databinding.ActivityDevicesInRoomBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeoutException
 
 class DevicesInRoomActivity : AppCompatActivity() {
     lateinit var binding: ActivityDevicesInRoomBinding
@@ -25,18 +26,25 @@ class DevicesInRoomActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        idOfRoom = intent.getIntExtra("id", 0)
+        try {
+            idOfRoom = intent.getIntExtra("id", 0)
 
-        val dataBaseManager = DataBaseManager()
-        GlobalScope.launch(Dispatchers.Main) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.tvDeviceName.setText("Устройства в " + dataBaseManager.getRoomName(idOfRoom))
-            val items = dataBaseManager.getDevicesInRoom(idOfRoom)
-            val adapter = RecyclerAdapterForMyDevices(items)
-            val layoutManager = GridLayoutManager(this@DevicesInRoomActivity, 2)
-            binding.recycler.layoutManager = layoutManager
-            binding.recycler.adapter = adapter
-            binding.progressBar.visibility = View.GONE
+            val dataBaseManager = DataBaseManager()
+            GlobalScope.launch(Dispatchers.Main) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.tvDeviceName.setText("Устройства в " + dataBaseManager.getRoomName(idOfRoom))
+                val items = dataBaseManager.getDevicesInRoom(idOfRoom)
+                val adapter = RecyclerAdapterForMyDevices(items)
+                val layoutManager = GridLayoutManager(this@DevicesInRoomActivity, 2)
+                binding.recycler.layoutManager = layoutManager
+                binding.recycler.adapter = adapter
+                binding.progressBar.visibility = View.GONE
+            }
+        }catch (e: TimeoutException) {
+                Toast.makeText(this,"Произошло исключение: ${e.message}",Toast.LENGTH_SHORT).show()
+            }
+        catch (e: Exception) {
+            Toast.makeText(this,"Произошло исключение: ${e.message}",Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -62,13 +62,10 @@ class RecyclerAdapterForMyDevices(private val items: List<devicesWithId>) :
                 GlobalScope.launch(Dispatchers.Main) {
                     dataBaseManager.changeDeviceStatus(item.id, isChecked)
                 }
-                if(isChecked) binding.textView14.visibility = View.VISIBLE
+                if (isChecked) binding.textView14.visibility = View.VISIBLE
                 else binding.textView14.visibility = View.GONE
             }
-
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

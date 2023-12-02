@@ -43,9 +43,9 @@ class UsersManager() {
             )
 
             val user_information =
-                userInformation("", user.id, " ")
+                userInformation(home_address = "", userId = user.id, image =  " ")
 
-            SupabaseManager.getSupabaseClient().postgrest["userInformation"].insert(
+            SupabaseManager.getSupabaseClient().postgrest["usersInformation"].insert(
                 user_information,
                 returning = Returning.REPRESENTATION
             )
@@ -61,19 +61,6 @@ class UsersManager() {
         }
     }
 
-    public fun saveToSharedPreferences(context: Context, value: String, key: String) {
-        val sharedPreferences =
-            context.getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(key, value)
-        editor.apply()
-    }
-
-    public fun getFromSharedPreferences(context: Context, key: String): String? {
-        val sharedPreferences =
-            context.getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString(key, null)
-    }
 
     public suspend fun Update() {
         SupabaseManager.getSupabaseClient().postgrest["users"].update(
@@ -207,6 +194,4 @@ class UsersManager() {
         }.decodeSingle<User>()
         return user
     }
-
-
 }

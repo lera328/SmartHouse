@@ -53,7 +53,8 @@
             app:strokeColor="@android:color/darker_gray"
             app:strokeWidth="1dp"
             android:onClick="onClickToGetImage"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:scaleType="centerCrop"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,17 +125,24 @@
             android:text="" />
 
         <Button
+            android:background="@color/darkBlue"
+            android:textColor="@color/white"
             android:id="@+id/btSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Сохранить"
+            android:layout_margin="16sp"
             android:onClick="onClickSave"/>
 
         <Button
+            android:background="#FA1624"
+            android:textColor="@color/white"
             android:id="@+id/btExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Выйти"
+            android:layout_marginRight="16sp"
+            android:layout_marginLeft="16sp"
             android:onClick="onClickExit"/>
 
     </LinearLayout>

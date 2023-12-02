@@ -30,7 +30,6 @@ class ChooseDeviceActivity : AppCompatActivity() {
         super.onResume()
 
         idOfRoom = intent.getIntExtra("roomId", 0)
-        //Toast.makeText(this@ChooseDeviceActivity, idOfRoom.toString(), Toast.LENGTH_SHORT).show()
         val dataBaseManager = DataBaseManager()
         GlobalScope.launch(Dispatchers.Main) {
             val items = dataBaseManager.getDevicesTypes()

@@ -23,46 +23,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Returning
 
 class DataBaseManager {
-    // public suspend fun addNewRoomType(
-    //     activity: Activity,
-    //     type: String,
-    //     image: String
-    // ) {
-    //     try {
-    //         val type = TypesOfRoom(type = type, image = image)
-    //         SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].insert(
-    //             type,
-    //             returning = Returning.REPRESENTATION
-    //         )
-    //     } catch (e: Exception) {
-    //         activity.runOnUiThread {
-    //             Log.e("aaa", e.message.toString())
-    //         }
-    //     }
-    // }
-
-//    public suspend fun getRoomTypeImage(id: Int): String {
-//
-//        val type = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].select(
-//            columns = Columns.list("type, image")
-//        ) {
-//            eq("id", id)
-//        }.decodeSingle<TypesOfRoom>()
-//        return type.image
-//
-//    }
-
-    public suspend fun getRoomTypeId(type: String): Int {
-
-        val type = SupabaseManager.getSupabaseClient().postgrest["typesOfRoom"].select(
-            columns = Columns.list("id, type, image")
-        ) {
-            eq("type", type)
-        }.decodeSingle<TypesOfRoomWithId>()
-        return type.id
-
-    }
-    public suspend fun getRoomIdFromDeviceId(id:Int): Int {
+    public suspend fun getRoomIdFromDeviceId(id: Int): Int {
 
         val device = SupabaseManager.getSupabaseClient().postgrest["devices"].select(
             columns = Columns.list("id, name, typeId, icon, roomId")
@@ -128,7 +89,6 @@ class DataBaseManager {
     }
 
     public suspend fun getMyRoomIconFromId(id: Int): room_iconsWithId {
-
         val roomIcons = SupabaseManager.getSupabaseClient().postgrest["room_icons"]
             .select(columns = Columns.list("id,  blue, grey, white")) {
                 eq("id", id)
@@ -137,65 +97,7 @@ class DataBaseManager {
         return roomIcons
     }
 
-    public suspend fun addNewDeviceType(
-        activity: Activity,
-        type: String,
-        image1: String,
-        image2: String,
-        image3: String
-    ) {
-        try {
-
-            val icons =
-                DeviceIcon(large_image = image1, middle_image = image2, small_image = image3)
-            SupabaseManager.getSupabaseClient().postgrest["devices_icons"].insert(
-                icons,
-                returning = Returning.REPRESENTATION
-            )
-
-            val iconId = SupabaseManager.getSupabaseClient().postgrest["devices_icons"].select(
-                columns = Columns.list("id, large_image, middle_image, small_image")
-            ) {
-                eq("large_image", image1)
-            }.decodeSingle<DeviceIconWithId>()
-
-
-            val type = typesOfDevices(type = type, iconId = iconId.id)
-            SupabaseManager.getSupabaseClient().postgrest["typesOfDevices"].insert(
-                type,
-                returning = Returning.REPRESENTATION
-            )
-        } catch (e: Exception) {
-            activity.runOnUiThread {
-                Log.e("aaa", e.message.toString())
-            }
-        }
-    }
-
-    public suspend fun addNewIcon(
-        activity: Activity,
-        image1: String,
-        image2: String,
-        image3: String
-    ) {
-        try {
-
-            val icons = devices_icons_(white = image1, blue = image2, grey = image3)
-            SupabaseManager.getSupabaseClient().postgrest["devices_icons_"].insert(
-                icons,
-                returning = Returning.REPRESENTATION
-            )
-        } catch (e: Exception) {
-            activity.runOnUiThread {
-                Log.e("aaa", e.message.toString())
-            }
-        }
-    }
-
     public suspend fun getDevicesInRoom(roomId_: Int): List<devicesWithId> {
-        //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
-        //    updateSession = true
-        //)
         val deviceList = SupabaseManager.getSupabaseClient().postgrest["devices"]
             .select(columns = Columns.list("id, name, typeId, icon, roomId")) {
                 eq("roomId", roomId_)
@@ -205,9 +107,6 @@ class DataBaseManager {
     }
 
     public suspend fun getDevicesIcon(id: Int): devices_icons_withId {
-        //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
-        //    updateSession = true
-        //)
         val deviceList = SupabaseManager.getSupabaseClient().postgrest["devices_icons_"]
             .select(columns = Columns.list("id, white, blue, grey")) {
                 eq("id", id)
@@ -217,9 +116,6 @@ class DataBaseManager {
     }
 
     public suspend fun getDevicesTypes(): List<typesOfDevicesWithId> {
-        //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
-        //    updateSession = true
-        //)
         val deviceList = SupabaseManager.getSupabaseClient().postgrest["typesOfDevices"]
             .select(columns = Columns.list("id, type, iconId"))
             .decodeList<typesOfDevicesWithId>()
@@ -227,9 +123,6 @@ class DataBaseManager {
     }
 
     public suspend fun getDeviceType(id: Int): typesOfDevicesWithId {
-        //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
-        //    updateSession = true
-        //)
         val deviceType = SupabaseManager.getSupabaseClient().postgrest["typesOfDevices"]
             .select(columns = Columns.list("id, type, iconId")) {
                 eq("id", id)
@@ -247,7 +140,6 @@ class DataBaseManager {
     ) {
 
         try {
-
             val device = devices(name = name, icon = iconId, roomId = roomId, typeId = typeId)
             SupabaseManager.getSupabaseClient().postgrest["devices"].insert(
                 device,
@@ -294,9 +186,6 @@ class DataBaseManager {
     }
 
     public suspend fun getRoomName(id: Int): String {
-        //val get_user = SupabaseManager.getSupabaseClient().gotrue.retrieveUserForCurrentSession(
-        //    updateSession = true
-        //)
         val room = SupabaseManager.getSupabaseClient().postgrest["rooms"]
             .select(columns = Columns.list("id, nameOfRoom, idOfType, userID")) {
                 eq("id", id)
@@ -309,14 +198,12 @@ class DataBaseManager {
         val device_parameter = SupabaseManager.getSupabaseClient().postgrest["device_parameters"]
             .select(columns = Columns.list("id, device_id, brightness, temperature, power, status")) {
                 eq("device_id", id)
-
             }.decodeSingle<device_parametersWithId>()
         return device_parameter
     }
 
     public suspend fun changeDeviceStatus(id: Int, status: Boolean): device_parameters {
         val params = getDeviceParameters(id)
-
         val devicePar = device_parameters(
             device_id = id,
             brightness = params.brightness,
@@ -324,12 +211,11 @@ class DataBaseManager {
             power = params.power,
             status = status
         )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
+        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].update(
+            {
+                set("status", status)
+            }
+        ) {
             eq("id", params.id)
         }
         return devicePar
@@ -343,21 +229,16 @@ class DataBaseManager {
     ) {
         val params = getDeviceParameters(id)
 
-        val devicePar = device_parameters(
-            device_id = id,
-            brightness = brightness,
-            temperature = temperature,
-            power = power,
-            status = params.status
-        )
-
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].insert(
-            devicePar,
-            returning = Returning.REPRESENTATION
-        )
-        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].delete {
+        SupabaseManager.getSupabaseClient().postgrest["device_parameters"].update(
+            {
+                set("brightness", brightness)
+                set("temperature", temperature)
+                set("power", power)
+            }
+        ) {
             eq("id", params.id)
         }
+
     }
 
 

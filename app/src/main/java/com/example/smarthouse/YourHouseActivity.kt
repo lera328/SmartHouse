@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.smarthouse.Tools.DataBaseManager
 import com.example.smarthouse.Adapters.ResyslerAdapterForMyRooms
@@ -12,6 +13,7 @@ import com.example.smarthouse.databinding.ActivityYourHouseBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeoutException
 
 class YourHouseActivity : AppCompatActivity() {
     lateinit var binding: ActivityYourHouseBinding
@@ -30,15 +32,19 @@ class YourHouseActivity : AppCompatActivity() {
         super.onResume()
         val dataBaseManager = DataBaseManager()
         val usersManager = UsersManager()
-        GlobalScope.launch(Dispatchers.Main) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.tvAddress.setText(usersManager.getUserInformation().home_address)
-            val items = dataBaseManager.getAllMyRooms()
-            val adapter = ResyslerAdapterForMyRooms(items)
-            val layoutManager = GridLayoutManager(this@YourHouseActivity, 1)
-            binding.recyclerViewRooms.layoutManager = layoutManager
-            binding.recyclerViewRooms.adapter = adapter
-            binding.progressBar.visibility = View.GONE
+        try {
+            GlobalScope.launch(Dispatchers.Main) {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.tvAddress.setText(usersManager.getUserInformation().home_address)
+                val items = dataBaseManager.getAllMyRooms()
+                val adapter = ResyslerAdapterForMyRooms(items)
+                val layoutManager = GridLayoutManager(this@YourHouseActivity, 1)
+                binding.recyclerViewRooms.layoutManager = layoutManager
+                binding.recyclerViewRooms.adapter = adapter
+                binding.progressBar.visibility = View.GONE
+            }
+        } catch (e: TimeoutException) {
+            Toast.makeText(this, "Произошло исключение: ${e.message}", Toast.LENGTH_SHORT).show()
         }
 
     }

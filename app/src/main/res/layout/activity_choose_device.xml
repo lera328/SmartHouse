@@ -51,7 +51,7 @@
         android:background="@drawable/transporent_button"
         android:ems="10"
         android:inputType="text"
-        android:text="Название устройства"
+        android:hint="Название устройства"
         android:padding="8sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,12 +80,16 @@
 
     <Button
         android:id="@+id/btPlusDevice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:onClick="onClick"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Button"
+        android:layout_marginEnd="32dp"
+        android:onClick="onClick"
+        android:text="Добавить"
+        android:background="@color/darkBlue"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerViewDevices" />

@@ -17,6 +17,7 @@ class ImageManager {
         val base64String = byteArrayToBase64(byteArray)
         return base64String
     }
+
     fun imageToByteArray(context: Context, imageUri: Uri): String {
         val inputStream = context.contentResolver.openInputStream(imageUri)
         val byteArray = inputStream?.readBytes()
